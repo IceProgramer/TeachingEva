@@ -1,7 +1,6 @@
 package com.itmo.teachingeva.service;
 
 import com.itmo.teachingeva.common.R;
-import com.itmo.teachingeva.dto.AdminDto;
 import com.itmo.teachingeva.entity.Admin;
 import com.baomidou.mybatisplus.extension.service.IService;
 

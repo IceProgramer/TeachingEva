@@ -62,10 +62,8 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
         // 3. 返回token和登陆结果
         HashMap<String, String> jwt = new HashMap<>();
         jwt.put("username", username);
-        jwt.put("password", password);
+        jwt.put("id", admin.getId().toString());
         String token = JwtUtil.generateToken(jwt);
-
-
 
         return R.success(token);
     }

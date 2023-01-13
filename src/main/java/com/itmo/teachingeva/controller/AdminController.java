@@ -1,7 +1,6 @@
 package com.itmo.teachingeva.controller;
 
 import com.itmo.teachingeva.common.R;
-import com.itmo.teachingeva.dto.AdminDto;
 import com.itmo.teachingeva.entity.Admin;
 import com.itmo.teachingeva.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,18 +21,6 @@ public class AdminController {
 
     @Resource
     private AdminService adminService;
-
-//    /**
-//     * 登陆
-//     * @param admin 前端返回的管理员信息
-//     * @return 错误码和信息
-//     */
-//    @PostMapping("/login")
-//    public R<AdminDto> login(@RequestBody Admin admin) {
-//        String username = admin.getUsername();
-//        String password = admin.getPassword();
-//        return adminService.doLogin(username, password);
-//    }
 
     /**
      * 登录测试
