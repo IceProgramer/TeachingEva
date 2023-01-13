@@ -1,4 +1,4 @@
-package com.example.reggie.common;
+package com.itmo.teachingeva.common;
 
 /**
  * 自定义业务异常类

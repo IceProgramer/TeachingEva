@@ -2,17 +2,18 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="generator.mapper.AdminMapper">
+<mapper namespace="com.itmo.teachingeva.mapper.AdminMapper">
 
-    <resultMap id="BaseResultMap" type="generator.entity.Admin">
+    <resultMap id="BaseResultMap" type="com.itmo.teachingeva.entity.Admin">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="username" column="username" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="role" column="role" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,username,password,
-        name
+        name,role
     </sql>
 </mapper>

@@ -1,6 +1,7 @@
-package com.example.reggie.common;
+package com.itmo.teachingeva.common;
 
 import lombok.Data;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,25 +18,21 @@ public class R<T> {
 
     private T data; //数据
 
-    private Map map = new HashMap(); //动态数据
 
     public static <T> R<T> success(T object) {
         R<T> r = new R<T>();
         r.data = object;
-        r.code = 1;
+        r.code = 200;
         return r;
     }
 
-    public static <T> R<T> error(String msg) {
+    public static <T> R<T> error(ErrorCode errorCode) {
         R r = new R();
-        r.msg = msg;
-        r.code = 0;
+        r.msg = errorCode.getMsg();
+        r.code = errorCode.getCode();
         return r;
     }
 
-    public R<T> add(String key, Object value) {
-        this.map.put(key, value);
-        return this;
-    }
+
 
 }
