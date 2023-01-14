@@ -13,7 +13,7 @@ public enum ErrorCode {
     SUCCESS(200, "success", ""),
 
     /**
-     * 账户相关
+     * 管理员账户相关
      */
     USER_NOT_EXIT(2000, "账户不存在！", ""),
     ACCOUNT_EMPTY(2001, "账号密码为空！", ""),
@@ -21,6 +21,14 @@ public enum ErrorCode {
     USERNAME_FORMAT_ERROR(2003, "账号格式不规范！", ""),
     PASSWORD_FORMAT_ERROR(2004, "密码格式不规范！", ""),
     USERNAME_EXIT(2005, "账户已存在！", ""),
+
+    /**
+     * 学生相关
+     */
+    STUDENT_EMPTY(3000, "无学生信息", ""),
+    STUDENT_EXIT(3001, "该学生已存在", ""),
+    STUDENT_NO_EXIT(3002, "学生不存在", ""),
+    STUDENT_GRADUATE(3003, "学生已毕业", ""),
 
     NO_PERMISSION(2006, "您没有权限！", ""),
 

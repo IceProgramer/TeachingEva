@@ -19,4 +19,11 @@ public interface StudentService extends IService<Student> {
      * @return 所有学生信息
      */
     BaseResponse<List<Student>> listAllStudents();
+
+    /**
+     * 添加学生信息 （单个）
+     *
+     * @return 是否添加成功
+     */
+    BaseResponse<Boolean> addNewStudents(Student student);
 }

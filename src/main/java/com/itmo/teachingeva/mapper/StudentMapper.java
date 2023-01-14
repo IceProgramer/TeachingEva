@@ -2,6 +2,7 @@ package com.itmo.teachingeva.mapper;
 
 import com.itmo.teachingeva.entity.Student;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -20,6 +21,10 @@ public interface StudentMapper extends BaseMapper<Student> {
      */
     @Select("select * from e_student where grade <= 8")
     List<Student> getAllStudents();
+
+    @Select("select * from e_student where sid = #{sid}")
+    Student getStudentBySid(String sid);
+
 }
 
 

@@ -32,7 +32,7 @@ public class AdminController {
     public BaseResponse<String> userLogin(@RequestBody Admin admin) {
         String username = admin.getUsername();
         String password = admin.getPassword();
-
+        log.info("插入成功");
         return adminService.doLogin(username, password);
     }
 
@@ -44,6 +44,7 @@ public class AdminController {
      */
     @GetMapping("getUser")
     public BaseResponse<Admin> gerUser(@RequestHeader("access-token") String token) {
+        log.info("获取用户信息成功");
         return adminService.getUser(token);
     }
 
