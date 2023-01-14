@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * 负责管理员登陆
@@ -35,16 +35,16 @@ public class AdminController {
 
         return adminService.doLogin(username, password);
     }
+
     /**
      * 获取登录用户信息
      *
-     * @param request
-     * @return
+     * @param token 前端返回的token值
+     * @return 脱敏后的用户信息
      */
     @GetMapping("getUser")
-    public Admin gerUser(HttpServletRequest request) {
-        Admin admin = (Admin) request.getAttribute("user");
-        return admin;
+    public BaseResponse<Admin> gerUser(@RequestHeader("access-token") String token) {
+        return adminService.getUser(token);
     }
 
 }

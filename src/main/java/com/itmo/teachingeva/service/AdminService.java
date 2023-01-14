@@ -4,6 +4,8 @@ import com.itmo.teachingeva.common.BaseResponse;
 import com.itmo.teachingeva.entity.Admin;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+
+
 /**
 * @author chenjiahan
 * @description 针对表【e_admin】的数据库操作Service
@@ -19,5 +21,12 @@ public interface AdminService extends IService<Admin> {
      */
     BaseResponse<String> doLogin(String username, String password);
 
+    /**
+     * 获取当前登陆用户信息
+     *
+     * @param token 前端返回的token值
+     * @return
+     */
+    BaseResponse<Admin> getUser(String token);
 
 }

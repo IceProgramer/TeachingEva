@@ -1,5 +1,6 @@
 package com.itmo.teachingeva.service.impl;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itmo.teachingeva.common.BaseResponse;
 import com.itmo.teachingeva.common.ErrorCode;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+
 
 
 /**
@@ -71,12 +73,35 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
 
     }
 
+    /**
+     * 获取当前登陆的用户信息
+     *
+     * @param token 前端返回的token值
+     * @return
+     */
+    @Override
+    public BaseResponse<Admin> getUser(String token) {
+        // 对传回来的token进行解析 -> 解析出token中对应用户的id
+        DecodedJWT decodedJWT = JwtUtil.decodeToken(token);
+        Integer id = Integer.valueOf(decodedJWT.getClaim("id").asString());
 
-    // 对用户进行脱敏
-//    AdminDto safetyAdmin = new AdminDto();
-//        safetyAdmin.setToken(token);
-//        safetyAdmin.setUsername(admin.getUsername());
-//        safetyAdmin.setName(admin.getName());
+        // 根据解析出来的id来查找相对应的用户
+        Admin admin = this.baseMapper.selectById(id);
+
+        // 校验用户是否存在
+        if (admin == null) {
+            // 如果不存在，抛出业务异常
+            throw new BusinessException(ErrorCode.USER_NOT_EXIT);
+        }
+
+        // 用户脱敏
+        Admin safetyAdmin = new Admin();
+        safetyAdmin.setId(admin.getId());
+        safetyAdmin.setUsername(admin.getUsername());
+        safetyAdmin.setName(admin.getName());
+
+        return ResultUtils.success(safetyAdmin);
+    }
 
 
 

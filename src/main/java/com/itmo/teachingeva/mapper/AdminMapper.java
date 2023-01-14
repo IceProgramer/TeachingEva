@@ -15,6 +15,11 @@ import java.util.List;
 */
 public interface AdminMapper extends BaseMapper<Admin> {
 
+    /**
+     * 根据用户名查找用户信息
+     * @param username 账号
+     * @return 对应用户信息
+     */
     @Select("select * from e_admin where username = #{username}")
     Admin getByUsername(String username);
 
