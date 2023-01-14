@@ -4,6 +4,7 @@ package com.itmo.teachingeva.controller;
 import com.itmo.teachingeva.common.BaseResponse;
 import com.itmo.teachingeva.common.ErrorCode;
 import com.itmo.teachingeva.common.ResultUtils;
+import com.itmo.teachingeva.dto.StudentDto;
 import com.itmo.teachingeva.entity.Student;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.service.StudentService;
@@ -31,7 +32,7 @@ public class StudentController {
      * @return 所有学生信息
      */
     @GetMapping("/page")
-    public BaseResponse<List<Student>> getAllStudents() {
+    public BaseResponse<List<StudentDto>> getAllStudents() {
         // 将年级不大于8的数据全部传输到前台
         log.info("查询数据中...");
         return studentService.listAllStudents();

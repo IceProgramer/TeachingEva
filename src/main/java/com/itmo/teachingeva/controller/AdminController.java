@@ -1,6 +1,7 @@
 package com.itmo.teachingeva.controller;
 
 import com.itmo.teachingeva.common.BaseResponse;
+import com.itmo.teachingeva.dto.AdminDto;
 import com.itmo.teachingeva.entity.Admin;
 import com.itmo.teachingeva.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +44,7 @@ public class AdminController {
      * @return 脱敏后的用户信息
      */
     @GetMapping("getUser")
-    public BaseResponse<Admin> gerUser(@RequestHeader("access-token") String token) {
+    public BaseResponse<AdminDto> gerUser(@RequestHeader("access-token") String token) {
         log.info("获取用户信息成功");
         return adminService.getUser(token);
     }

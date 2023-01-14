@@ -4,15 +4,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itmo.teachingeva.common.BaseResponse;
 import com.itmo.teachingeva.common.ErrorCode;
 import com.itmo.teachingeva.common.ResultUtils;
+import com.itmo.teachingeva.dto.AdminDto;
+import com.itmo.teachingeva.dto.StudentDto;
 import com.itmo.teachingeva.entity.Student;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.service.StudentService;
 import com.itmo.teachingeva.mapper.StudentMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,18 +38,27 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
      * @return 学生信息
      */
     @Override
-    public BaseResponse<List<Student>> listAllStudents() {
+    public BaseResponse<List<StudentDto>> listAllStudents() {
         // 只有学期数小于8的学生才能被查询
         List<Student> allStudents = studentMapper.getAllStudents();
         if (allStudents == null) {
             throw new BusinessException(ErrorCode.STUDENT_EMPTY, "请联系开发人员");
         }
-        allStudents.stream().map(student -> {
-            student.setPassword(null);
-            return student;
-        }).collect(Collectors.toList());
 
-        return ResultUtils.success(allStudents);
+        List<StudentDto> studentDtoList = new ArrayList<>();
+        for (Student student : allStudents) {
+            StudentDto studentDto = new StudentDto();
+            studentDto.setId(student.getId());
+            studentDto.setSid(student.getSid());
+            studentDto.setName(student.getName());
+            studentDto.setSex(student.getSex());
+            studentDto.setAge(student.getAge());
+            studentDto.setMajor(student.getMajor());
+            studentDto.setCid(student.getCid().toString());
+            studentDtoList.add(studentDto);
+        }
+
+        return ResultUtils.success(studentDtoList);
     }
 
     /**
@@ -71,21 +84,18 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
 
         // 2.将学生的密码设为账号
         String password = student.getSid();
-        // 信息脱敏
-        Student safetyStudent = new Student();
-        safetyStudent.setSid(student.getSid());
-        safetyStudent.setPassword(DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)));
-        safetyStudent.setName(student.getName());
-        safetyStudent.setSex(student.getSex());
-        safetyStudent.setAge(student.getAge());
-        safetyStudent.setMajor(student.getMajor());
-        safetyStudent.setCid(student.getCid());
-        safetyStudent.setGrade(student.getGrade());
+        // 密码加密
+        student.setPassword(DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8)));
 
         // 插入数据
-        boolean save = this.save(safetyStudent);
+        boolean save = this.save(student);
 
         return ResultUtils.success(save);
+    }
+
+    @Override
+    public BaseResponse<Boolean> deleteStudent(Student student) {
+        return null;
     }
 
 

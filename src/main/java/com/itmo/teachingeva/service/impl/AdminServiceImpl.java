@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itmo.teachingeva.common.BaseResponse;
 import com.itmo.teachingeva.common.ErrorCode;
 import com.itmo.teachingeva.common.ResultUtils;
+import com.itmo.teachingeva.dto.AdminDto;
 import com.itmo.teachingeva.entity.Admin;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.service.AdminService;
@@ -80,7 +81,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
      * @return
      */
     @Override
-    public BaseResponse<Admin> getUser(String token) {
+    public BaseResponse<AdminDto> getUser(String token) {
         // 对传回来的token进行解析 -> 解析出token中对应用户的id
         DecodedJWT decodedJWT = JwtUtil.decodeToken(token);
         Integer id = Integer.valueOf(decodedJWT.getClaim("id").asString());
@@ -95,12 +96,13 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin>
         }
 
         // 用户脱敏
-        Admin safetyAdmin = new Admin();
-        safetyAdmin.setId(admin.getId());
-        safetyAdmin.setUsername(admin.getUsername());
-        safetyAdmin.setName(admin.getName());
+        AdminDto adminDto = new AdminDto();
+        adminDto.setId(admin.getId());
+        adminDto.setUsername(admin.getUsername());
+        adminDto.setName(admin.getName());
 
-        return ResultUtils.success(safetyAdmin);
+
+        return ResultUtils.success(adminDto);
     }
 
 

@@ -1,6 +1,7 @@
 package com.itmo.teachingeva.service;
 
 import com.itmo.teachingeva.common.BaseResponse;
+import com.itmo.teachingeva.dto.AdminDto;
 import com.itmo.teachingeva.entity.Admin;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -27,6 +28,6 @@ public interface AdminService extends IService<Admin> {
      * @param token 前端返回的token值
      * @return
      */
-    BaseResponse<Admin> getUser(String token);
+    BaseResponse<AdminDto> getUser(String token);
 
 }

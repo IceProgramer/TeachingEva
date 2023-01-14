@@ -1,6 +1,7 @@
 package com.itmo.teachingeva.service;
 
 import com.itmo.teachingeva.common.BaseResponse;
+import com.itmo.teachingeva.dto.StudentDto;
 import com.itmo.teachingeva.entity.Student;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -18,7 +19,7 @@ public interface StudentService extends IService<Student> {
      *
      * @return 所有学生信息
      */
-    BaseResponse<List<Student>> listAllStudents();
+    BaseResponse<List<StudentDto>> listAllStudents();
 
     /**
      * 添加学生信息 （单个）
@@ -26,4 +27,6 @@ public interface StudentService extends IService<Student> {
      * @return 是否添加成功
      */
     BaseResponse<Boolean> addNewStudents(Student student);
+
+    BaseResponse<Boolean> deleteStudent(Student student);
 }
