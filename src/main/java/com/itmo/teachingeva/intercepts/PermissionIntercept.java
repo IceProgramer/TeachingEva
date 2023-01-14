@@ -3,6 +3,8 @@ package com.itmo.teachingeva.intercepts;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.itmo.teachingeva.common.ErrorCode;
+import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.utilts.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.plugin.Intercepts;

@@ -1,6 +1,6 @@
 package com.itmo.teachingeva.service;
 
-import com.itmo.teachingeva.common.R;
+import com.itmo.teachingeva.common.BaseResponse;
 import com.itmo.teachingeva.entity.Admin;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -17,7 +17,7 @@ public interface AdminService extends IService<Admin> {
      * @param password 密码
      * @return token
      */
-    R<String> doLogin(String username, String password);
+    BaseResponse<String> doLogin(String username, String password);
 
 
 }

@@ -1,6 +1,6 @@
 package com.itmo.teachingeva.controller;
 
-import com.itmo.teachingeva.common.R;
+import com.itmo.teachingeva.common.BaseResponse;
 import com.itmo.teachingeva.entity.Admin;
 import com.itmo.teachingeva.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class AdminController {
      * @return 返回token
      */
     @PostMapping("/login")
-    public R<String> userLogin(@RequestBody Admin admin) {
+    public BaseResponse<String> userLogin(@RequestBody Admin admin) {
         String username = admin.getUsername();
         String password = admin.getPassword();
 
