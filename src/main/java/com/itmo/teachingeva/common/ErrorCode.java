@@ -32,7 +32,12 @@ public enum ErrorCode {
 
     NO_PERMISSION(2006, "您没有权限！", ""),
 
-    SYSTEM_ERROR(5000, "系统内部异常", "");
+
+
+    SYSTEM_ERROR(5000, "系统内部异常", ""),
+    FILE_EMPTY(5001, "文件为空", "");
+
+
 
 
     /**

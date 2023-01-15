@@ -8,9 +8,14 @@ import com.itmo.teachingeva.dto.StudentDto;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -87,6 +92,11 @@ public class StudentController {
         return ResultUtils.success(true);
     }
 
+    /**
+     * 获取单个学生信息
+     * @param studentDto 学生id
+     * @return 学生信息
+     */
     @GetMapping("/info")
     public BaseResponse<StudentDto> getStudent(@RequestBody StudentDto studentDto) {
         StudentDto studentInfo = studentService.getStudent(studentDto);
@@ -98,6 +108,46 @@ public class StudentController {
         return ResultUtils.success(studentInfo);
     }
 
+    /**
+     * Excel文件批量上传学生信息
+     * @param file
+     * @return
+     */
+    @PostMapping("/excel/import")
+    public BaseResponse<Boolean> saveExcel(@RequestParam("file") MultipartFile file) {
 
+        Boolean isImport = studentService.excelImport(file);
+
+        if (!isImport) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "保存文件失败！");
+        }
+
+        return ResultUtils.success(true);
+    }
+
+
+    @GetMapping("/excel/export")
+    public BaseResponse<Boolean> exportExcel(HttpServletResponse response) {
+
+        //2.建立Excel对象，封装数据
+        response.setCharacterEncoding("UTF-8");
+        //2.1创建Excel对象
+        XSSFWorkbook wb = new XSSFWorkbook();
+        //2.3创建sheet对象
+        XSSFSheet sheet = wb.createSheet("学生信息表");
+        //2.3创建表头
+        XSSFRow xssfRow = sheet.createRow(0);
+        xssfRow.createCell(0).setCellValue("学生名称");
+        xssfRow.createCell(1).setCellValue("学号");
+        xssfRow.createCell(2).setCellValue("性别");
+        xssfRow.createCell(3).setCellValue("年龄");
+        xssfRow.createCell(4).setCellValue("专业（0为计算机，1为计算机）");
+        xssfRow.createCell(5).setCellValue("班级号");
+        xssfRow.createCell(6).setCellValue("学期（1-8）");
+
+        return ResultUtils.success(true);
+    }
+
+    //todo 完成随着时间增加学生年级也会增加
 
 }

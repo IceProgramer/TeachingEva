@@ -10,14 +10,23 @@ import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.mapper.StudentClassMapper;
 import com.itmo.teachingeva.service.StudentService;
 import com.itmo.teachingeva.mapper.StudentMapper;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.beans.Transient;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author chenjiahan
@@ -66,6 +75,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
 
     /**
      * 添加学生信息（单个）
+     *
      * @return 添加成功
      */
     @Override
@@ -151,6 +161,59 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
         BeanUtils.copyProperties(student, studentInfo);
 
         return studentInfo;
+    }
+
+    @Override
+    @Transactional
+    public Boolean excelImport(MultipartFile file) {
+
+        // 1.判断文件是否为空
+        if (file.isEmpty()) {
+            throw new BusinessException(ErrorCode.FILE_EMPTY, "请重新上传文件");
+        }
+
+        XSSFWorkbook wb = null;
+        try {
+            // 2.POI 获取Excel数据
+            wb = new XSSFWorkbook(file.getInputStream());
+            XSSFSheet sheet = wb.getSheetAt(0);
+
+            // 3.定义程序集合来接收文件内容
+            List<Student> studentList = new ArrayList<>();
+            XSSFRow row = null;
+
+            //4.接收数据 装入集合中
+            for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+                row = sheet.getRow(i);
+                Student student = new Student();
+                student.setName(row.getCell(0).getStringCellValue());   //姓名
+                student.setSid(new DataFormatter().formatCellValue(row.getCell(1)));
+                student.setSex(row.getCell(2).getStringCellValue().equals("男") ? 1 : 0);   //性别  男为1 女为0
+                student.setAge(Integer.valueOf(new DataFormatter().formatCellValue(row.getCell(3))));       //年龄
+                student.setMajor(Integer.valueOf(new DataFormatter().formatCellValue(row.getCell(4))));     //专业
+                student.setCid(studentClassMapper.queryClassId(new DataFormatter().formatCellValue(row.getCell(5))));   //班级
+                student.setGrade(Integer.valueOf(new DataFormatter().formatCellValue(row.getCell(6))));  //年级
+
+                studentList.add(student);
+            }
+            // 密码进行加密添加
+            studentList = studentList.stream().map(student -> {
+                student.setPassword(DigestUtils.md5DigestAsHex(student.getSid().getBytes(StandardCharsets.UTF_8)));
+                return student;
+            }).collect(Collectors.toList());
+
+            // 将列表保存到数据库中
+            boolean save = this.saveBatch(studentList);
+
+            if (!save) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "保存文件失败");
+            }
+            // 保存成功
+            return true;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
