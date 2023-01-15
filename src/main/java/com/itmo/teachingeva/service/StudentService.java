@@ -26,7 +26,27 @@ public interface StudentService extends IService<Student> {
      *
      * @return 是否添加成功
      */
-    BaseResponse<Boolean> addNewStudents(Student student);
+    BaseResponse<Boolean> addStudents(StudentDto studentDto);
 
-    BaseResponse<Boolean> deleteStudent(Student student);
+    /**
+     * 删除学生数据
+     * @param studentDto 学生的id
+     * @return 删除成功
+     */
+    BaseResponse<Boolean> deleteStudent(StudentDto studentDto);
+
+    /**
+     * 更新学生数据
+     * @param studentDto 学生信息
+     * @return 更新成功
+     */
+    BaseResponse<Boolean> updateStudent(StudentDto studentDto);
+
+    /**
+     * 获取单个学生信息
+     *
+     * @param studentDto 学生的id
+     * @return 学生信息
+     */
+    StudentDto getStudent(StudentDto studentDto);
 }

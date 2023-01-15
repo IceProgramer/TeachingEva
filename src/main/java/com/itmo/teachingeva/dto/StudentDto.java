@@ -47,4 +47,9 @@ public class StudentDto implements Serializable {
      */
     private String cid;
 
+    /**
+     * 年级
+     */
+    private Integer grade;
+
 }
