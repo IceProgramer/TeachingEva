@@ -5,23 +5,13 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * Student的Dto类
- *
- * @author chenjiahan
- */
 @Data
-public class StudentDto implements Serializable {
+public class TeacherDto implements Serializable {
 
     /**
      * id
      */
     private Integer id;
-
-    /**
-     * 学号
-     */
-    private String sid;
 
     /**
      * 姓名
@@ -39,20 +29,31 @@ public class StudentDto implements Serializable {
     private Integer age;
 
     /**
-     * 专业
+     * 职位
+     */
+    private String position;
+
+    /**
+     * 职称
+     */
+    private String pTitle;
+
+    /**
+     * 专业，0为计算机，1为自动化
      */
     private Integer major;
 
     /**
-     * 班级编号
+     * 邮箱
      */
-    private String cid;
+    private String email;
 
     /**
-     * 年级
+     * 0为俄方，1为中方
      */
-    private Integer grade;
+    private Integer identity;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
 }

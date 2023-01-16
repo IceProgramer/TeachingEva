@@ -1,8 +1,11 @@
 package com.itmo.teachingeva.controller;
 
 import com.itmo.teachingeva.common.BaseResponse;
+import com.itmo.teachingeva.common.ErrorCode;
+import com.itmo.teachingeva.common.ResultUtils;
 import com.itmo.teachingeva.dto.AdminDto;
-import com.itmo.teachingeva.entity.Admin;
+import com.itmo.teachingeva.domain.Admin;
+import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +37,8 @@ public class AdminController {
         String username = admin.getUsername();
         String password = admin.getPassword();
         log.info("插入成功");
-        return adminService.doLogin(username, password);
+        String token = adminService.doLogin(username, password);
+        return ResultUtils.success(token);
     }
 
     /**
@@ -46,7 +50,13 @@ public class AdminController {
     @GetMapping("getUser")
     public BaseResponse<AdminDto> gerUser(@RequestHeader("access-token") String token) {
         log.info("获取用户信息成功");
-        return adminService.getUser(token);
+        AdminDto adminInfo = adminService.getUser(token);
+
+        if (adminInfo ==  null) {
+            throw new BusinessException(ErrorCode.USER_NOT_EXIT);
+        }
+
+        return ResultUtils.success(adminInfo);
     }
 
 }

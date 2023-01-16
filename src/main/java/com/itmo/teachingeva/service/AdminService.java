@@ -1,8 +1,7 @@
 package com.itmo.teachingeva.service;
 
-import com.itmo.teachingeva.common.BaseResponse;
 import com.itmo.teachingeva.dto.AdminDto;
-import com.itmo.teachingeva.entity.Admin;
+import com.itmo.teachingeva.domain.Admin;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 
@@ -14,13 +13,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface AdminService extends IService<Admin> {
 
+    //todo 代码优化 将所有service层中的BaseResponse换掉
     /**
      * 登陆验证
+     *
      * @param username 用户名
      * @param password 密码
      * @return token
      */
-    BaseResponse<String> doLogin(String username, String password);
+    String doLogin(String username, String password);
 
     /**
      * 获取当前登陆用户信息
@@ -28,6 +29,6 @@ public interface AdminService extends IService<Admin> {
      * @param token 前端返回的token值
      * @return
      */
-    BaseResponse<AdminDto> getUser(String token);
+    AdminDto getUser(String token);
 
 }

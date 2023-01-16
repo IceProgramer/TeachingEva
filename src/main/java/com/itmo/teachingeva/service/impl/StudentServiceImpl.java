@@ -1,11 +1,11 @@
 package com.itmo.teachingeva.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.itmo.teachingeva.common.BaseResponse;
 import com.itmo.teachingeva.common.ErrorCode;
 import com.itmo.teachingeva.common.ResultUtils;
+import com.itmo.teachingeva.domain.StudentClass;
 import com.itmo.teachingeva.dto.StudentDto;
-import com.itmo.teachingeva.entity.Student;
+import com.itmo.teachingeva.domain.Student;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.mapper.StudentClassMapper;
 import com.itmo.teachingeva.service.StudentService;
@@ -21,21 +21,21 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.beans.Transient;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
-* @author chenjiahan
-* @description 针对表【e_student】的数据库操作Service实现
-* @createDate 2023-01-14 14:40:03
-*/
+ * @author chenjiahan
+ * @description 针对表【e_student】的数据库操作Service实现
+ * @createDate 2023-01-14 14:40:03
+ */
 @Service
 public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
-    implements StudentService {
+        implements StudentService {
 
     @Resource
     private StudentMapper studentMapper;
@@ -49,7 +49,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
      * @return 学生信息
      */
     @Override
-    public BaseResponse<List<StudentDto>> listAllStudents() {
+    public List<StudentDto> listAllStudents() {
         // 只有学期数小于8的学生才能被查询
         List<Student> allStudents = studentMapper.getAllStudents();
         if (allStudents == null) {
@@ -58,19 +58,22 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
 
         // 将do数据转到dto
         List<StudentDto> studentDtoList = new ArrayList<>();
+
+        // 先取出所有的班级列表
+        List<StudentClass> studentClasses = studentClassMapper.queryClassToList();
+
+        // 将班级根据id和cid对应做成Map
+        Map<Integer, String> classMap = studentClasses.stream().collect(Collectors.toMap(StudentClass::getId, StudentClass::getCid));
+
+        // 转换数据
         for (Student student : allStudents) {
             StudentDto studentDto = new StudentDto();
-            studentDto.setId(student.getId());
-            studentDto.setSid(student.getSid());
-            studentDto.setName(student.getName());
-            studentDto.setSex(student.getSex());
-            studentDto.setAge(student.getAge());
-            studentDto.setMajor(student.getMajor());
-            studentDto.setCid(studentClassMapper.queryClass(student.getCid()));
+            BeanUtils.copyProperties(student, studentDto, "Cid");
+            studentDto.setCid(classMap.get(student.getCid()));
             studentDtoList.add(studentDto);
         }
 
-        return ResultUtils.success(studentDtoList);
+        return studentDtoList;
     }
 
     /**
@@ -79,7 +82,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
      * @return 添加成功
      */
     @Override
-    public BaseResponse<Boolean> addStudents(StudentDto studentDto) {
+    public Boolean addStudents(StudentDto studentDto) {
         // 1.对student进行校验
         // a.student不为空
         if (studentDto == null) {
@@ -89,7 +92,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
         if (studentDto.getGrade() > 8) {
             throw new BusinessException(ErrorCode.STUDENT_GRADUATE, "请检查输入信息");
         }
-         // c.查找该学生是否已存在
+        // c.查找该学生是否已存在
         Student studentBySid = studentMapper.getStudentBySid(studentDto.getSid());
         if (studentBySid != null) {
             throw new BusinessException(ErrorCode.STUDENT_EXIT, "请重新输入");
@@ -107,7 +110,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
         // 插入数据
         boolean save = this.save(student);
 
-        return ResultUtils.success(save);
+        return save;
     }
 
     /**
@@ -116,53 +119,59 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
      * @return 是否添加成功
      */
     @Override
-    public BaseResponse<Boolean> deleteStudent(StudentDto studentDto) {
+    public Boolean deleteStudent(StudentDto studentDto) {
         Integer id = studentDto.getId();
 
         boolean isDelete = this.removeById(id);
 
-        return ResultUtils.success(isDelete);
+        return isDelete;
     }
 
     /**
      * 删除学生数据
+     *
      * @param studentDto 学生的id
      * @return 删除成功
      */
     @Override
-    public BaseResponse<Boolean> updateStudent(StudentDto studentDto) {
+    public Boolean updateStudent(StudentDto studentDto) {
         Student student = new Student();
 
         BeanUtils.copyProperties(studentDto, student);
 
         this.updateById(student);
 
-        return ResultUtils.success(true);
+        return true;
     }
 
     /**
      * 获取单个学生信息
      *
-     * @param studentDto 学生的id
+     * @param id 学生的id
      * @return 学生信息
      */
     @Override
-    public StudentDto getStudent(StudentDto studentDto) {
-        // 校验学生信息
-        Integer id = studentDto.getId();
-        if (id == null) {
+    public StudentDto getStudent(Integer id) {
+
+        Student student = this.getById(id);
+
+        if (student == null) {
             // 学生是否存在
             throw new BusinessException(ErrorCode.STUDENT_EMPTY, "请检查id");
         }
 
-        Student student = this.getById(id);
-
         StudentDto studentInfo = new StudentDto();
         BeanUtils.copyProperties(student, studentInfo);
+        studentInfo.setCid(studentClassMapper.queryClass(student.getCid()));
 
         return studentInfo;
     }
 
+    /**
+     * Excel批量保存上传
+     * @param file excel文件
+     * @return
+     */
     @Override
     @Transactional
     public Boolean excelImport(MultipartFile file) {
@@ -182,6 +191,13 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
             List<Student> studentList = new ArrayList<>();
             XSSFRow row = null;
 
+            // 定义班级集合
+            List<StudentClass> studentClasses = studentClassMapper.queryClassToList();
+
+            // 将班级根据id和cid对应做成Map
+            Map<String, Integer> classMap = studentClasses.stream().collect(Collectors.toMap(StudentClass::getCid, StudentClass::getId));
+
+
             //4.接收数据 装入集合中
             for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
                 row = sheet.getRow(i);
@@ -191,7 +207,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
                 student.setSex(row.getCell(2).getStringCellValue().equals("男") ? 1 : 0);   //性别  男为1 女为0
                 student.setAge(Integer.valueOf(new DataFormatter().formatCellValue(row.getCell(3))));       //年龄
                 student.setMajor(Integer.valueOf(new DataFormatter().formatCellValue(row.getCell(4))));     //专业
-                student.setCid(studentClassMapper.queryClassId(new DataFormatter().formatCellValue(row.getCell(5))));   //班级
+                student.setCid(classMap.get(new DataFormatter().formatCellValue(row.getCell(5))));   //班级
                 student.setGrade(Integer.valueOf(new DataFormatter().formatCellValue(row.getCell(6))));  //年级
 
                 studentList.add(student);

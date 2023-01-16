@@ -1,4 +1,4 @@
-package com.itmo.teachingeva.entity;
+package com.itmo.teachingeva.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -22,6 +22,4 @@ public class StudentClass implements Serializable {
      */
     private String cid;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

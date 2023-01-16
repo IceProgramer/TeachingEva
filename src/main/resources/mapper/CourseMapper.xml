@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itmo.teachingeva.mapper.CourseMapper">
+
+    <resultMap id="BaseResultMap" type="com.itmo.teachingeva.domain.Course">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="cName" column="c_name" jdbcType="VARCHAR"/>
+            <result property="eName" column="e_name" jdbcType="VARCHAR"/>
+            <result property="major" column="major" jdbcType="INTEGER"/>
+            <result property="tid" column="tid" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,c_name,e_name,
+        major,tid
+    </sql>
+</mapper>

@@ -1,5 +1,6 @@
 package com.itmo.teachingeva.dto;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -28,5 +29,7 @@ public class AdminDto implements Serializable {
      */
     private String name;
 
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
 
 }

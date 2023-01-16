@@ -39,7 +39,14 @@ public class StudentController {
     public BaseResponse<List<StudentDto>> getAllStudents() {
         // 将年级不大于8的数据全部传输到前台
         log.info("查询数据中...");
-        return studentService.listAllStudents();
+
+        List<StudentDto> studentDtos = studentService.listAllStudents();
+
+        if (studentDtos == null) {
+            throw new BusinessException(ErrorCode.STUDENT_EMPTY, "请检查库表");
+        }
+
+        return ResultUtils.success(studentDtos);
     }
 
 
@@ -49,7 +56,7 @@ public class StudentController {
      */
     @PostMapping("/add")
     public BaseResponse<Boolean> addStudent(@RequestBody StudentDto studentDto) {
-        boolean isSave = studentService.addStudents(studentDto).getData();
+        boolean isSave = studentService.addStudents(studentDto);
 
         if (!isSave) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "插入数据失败");
@@ -66,7 +73,7 @@ public class StudentController {
      */
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteStudent(@RequestBody StudentDto studentDto) {
-        boolean isDelete = studentService.deleteStudent(studentDto).getData();
+        boolean isDelete = studentService.deleteStudent(studentDto);
 
         if (!isDelete) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "删除数据失败");
@@ -82,7 +89,7 @@ public class StudentController {
      */
     @PutMapping("/update")
     public BaseResponse<Boolean> updateStudent(@RequestBody StudentDto studentDto) {
-        boolean isUpdate = studentService.updateStudent(studentDto).getData();
+        boolean isUpdate = studentService.updateStudent(studentDto);
 
         if (!isUpdate) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新数据失败");
@@ -99,7 +106,13 @@ public class StudentController {
      */
     @GetMapping("/info")
     public BaseResponse<StudentDto> getStudent(@RequestBody StudentDto studentDto) {
-        StudentDto studentInfo = studentService.getStudent(studentDto);
+        Integer id = studentDto.getId();
+
+        if (id == null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "id值为空！");
+        }
+
+        StudentDto studentInfo = studentService.getStudent(id);
 
         if (studentInfo == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "获取失败");

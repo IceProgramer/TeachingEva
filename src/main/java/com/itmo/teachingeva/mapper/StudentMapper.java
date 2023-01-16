@@ -1,12 +1,8 @@
 package com.itmo.teachingeva.mapper;
 
-import com.itmo.teachingeva.entity.Student;
+import com.itmo.teachingeva.domain.Student;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.itmo.teachingeva.entity.StudentClass;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -14,7 +10,7 @@ import java.util.List;
 * @author chenjiahan
 * @description 针对表【e_student】的数据库操作Mapper
 * @createDate 2023-01-14 14:40:04
-* @Entity com.itmo.teachingeva.entity.Student
+* @Entity com.itmo.teachingeva.domain.Student
 */
 public interface StudentMapper extends BaseMapper<Student> {
 

@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itmo.teachingeva.mapper.StudentMapper">
 
-    <resultMap id="BaseResultMap" type="com.itmo.teachingeva.entity.Student">
+    <resultMap id="BaseResultMap" type="com.itmo.teachingeva.domain.Student">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="sid" column="sid" jdbcType="VARCHAR"/>
             <result property="password" column="password" jdbcType="VARCHAR"/>

@@ -1,4 +1,4 @@
-package com.itmo.teachingeva.entity;
+package com.itmo.teachingeva.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -8,28 +8,16 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
- * 学生表
- *
- * @TableName e_student
+ * 
+ * @TableName e_teacher
  */
-@TableName(value ="e_student")
+@TableName(value ="e_teacher")
 @Data
-public class Student implements Serializable {
+public class Teacher implements Serializable {
     /**
      * 
      */
-    @TableId(type = IdType.AUTO)
     private Integer id;
-
-    /**
-     * 学号
-     */
-    private String sid;
-
-    /**
-     * 密码
-     */
-    private String password;
 
     /**
      * 姓名
@@ -47,21 +35,29 @@ public class Student implements Serializable {
     private Integer age;
 
     /**
+     * 职位
+     */
+    private Integer position;
+
+    /**
+     * 职称
+     */
+    private Integer pTitle;
+
+    /**
      * 专业，0为计算机，1为自动化
      */
     private Integer major;
 
     /**
-     * 班级主键
+     * 邮箱
      */
-    private Integer cid;
+    private String email;
 
     /**
-     * 年级，1-8代表八个学期
+     * 0为俄方，1为中方
      */
-    private Integer grade;
+    private Integer identity;
 
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 
 }

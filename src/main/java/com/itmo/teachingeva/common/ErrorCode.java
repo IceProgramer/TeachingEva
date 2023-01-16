@@ -30,6 +30,13 @@ public enum ErrorCode {
     STUDENT_NO_EXIT(3002, "学生不存在", ""),
     STUDENT_GRADUATE(3003, "学生已毕业", ""),
 
+    /**
+     * 教师相关
+     */
+    TEACHER_EMPTY(4000, "无教师信息", ""),
+    TEACHER_EXIT(4001, "教师已存在", ""),
+    TEACHER_NO_EXIT(4002, "教师不存在", ""),
+
     NO_PERMISSION(2006, "您没有权限！", ""),
 
 

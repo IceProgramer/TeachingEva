@@ -1,4 +1,4 @@
-package com.itmo.teachingeva.entity;
+package com.itmo.teachingeva.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -9,38 +9,35 @@ import lombok.Data;
 
 /**
  * 
- * @TableName e_admin
+ * @TableName e_course
  */
-@TableName(value ="e_admin")
+@TableName(value ="e_course")
 @Data
-public class Admin implements Serializable {
+public class Course implements Serializable {
     /**
-     * 主键
+     * 
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 账号
+     * 中文名称
      */
-    private String username;
+    private String cName;
 
     /**
-     * 密码
+     * 英文名称
      */
-    private String password;
+    private String eName;
 
     /**
-     * 用户姓名
+     * 专业，0为计算机，1为自动化
      */
-    private String name;
+    private Integer major;
 
     /**
-     * 权限
+     * 教师id
      */
-    private Integer role;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+    private Integer tid;
 
 }

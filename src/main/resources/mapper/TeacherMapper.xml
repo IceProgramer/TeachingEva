@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itmo.teachingeva.mapper.TeacherMapper">
+
+    <resultMap id="BaseResultMap" type="com.itmo.teachingeva.domain.Teacher">
+            <result property="id" column="id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="INTEGER"/>
+            <result property="age" column="age" jdbcType="INTEGER"/>
+            <result property="position" column="position" jdbcType="INTEGER"/>
+            <result property="pTitle" column="p_title" jdbcType="INTEGER"/>
+            <result property="major" column="major" jdbcType="INTEGER"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="identity" column="identity" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,sex,
+        age,position,p_title,
+        major,email,identity
+    </sql>
+</mapper>
