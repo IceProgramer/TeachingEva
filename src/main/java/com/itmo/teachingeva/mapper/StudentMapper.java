@@ -1,4 +1,4 @@
-package com.itmo.teachingeva.intercepts.mapper;
+package com.itmo.teachingeva.mapper;
 
 import com.itmo.teachingeva.domain.Student;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -30,6 +30,12 @@ public interface StudentMapper extends BaseMapper<Student> {
     Student getStudentBySid(String sid);
 
 
+    /**
+     * 根据年级和专业来查找学生
+     * @return 相对应的学生
+     */
+    @Select("select id from e_student where grade = #{grade} and major = #{major}")
+    List<Integer> getStudentByGradeAndMajor(Integer grade, Integer major);
 
 
 }

@@ -2,15 +2,16 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.itmo.teachingeva.mapper.CourseTeacherMapper">
+<mapper namespace="com.itmo.teachingeva.mapper.CourseGradeMapper">
 
-    <resultMap id="BaseResultMap" type="com.itmo.teachingeva.domain.CourseTeacher">
+    <resultMap id="BaseResultMap" type="com.itmo.teachingeva.domain.CourseGrade">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="cid" column="cid" jdbcType="INTEGER"/>
-            <result property="tid" column="tid" jdbcType="INTEGER"/>
+            <result property="gid" column="gid" jdbcType="INTEGER"/>
+            <result property="major" column="major" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,cid,tid
+        id,cid,gid,major
     </sql>
 </mapper>

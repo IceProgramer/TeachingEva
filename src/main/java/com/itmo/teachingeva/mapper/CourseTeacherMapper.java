@@ -1,4 +1,4 @@
-package com.itmo.teachingeva.intercepts.mapper;
+package com.itmo.teachingeva.mapper;
 
 import com.itmo.teachingeva.domain.CourseTeacher;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

@@ -7,7 +7,7 @@ import com.itmo.teachingeva.dto.AdminDto;
 import com.itmo.teachingeva.domain.Admin;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.service.AdminService;
-import com.itmo.teachingeva.intercepts.mapper.AdminMapper;
+import com.itmo.teachingeva.mapper.AdminMapper;
 import com.itmo.teachingeva.utilts.JwtUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;

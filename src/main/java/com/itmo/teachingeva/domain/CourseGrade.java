@@ -9,11 +9,11 @@ import lombok.Data;
 
 /**
  * 
- * @TableName e_mark_history
+ * @TableName e_course_to_grade
  */
-@TableName(value ="e_mark_history")
+@TableName(value ="e_course_to_grade")
 @Data
-public class MarkHistory implements Serializable {
+public class CourseGrade implements Serializable {
     /**
      * 
      */
@@ -21,38 +21,18 @@ public class MarkHistory implements Serializable {
     private Integer id;
 
     /**
-     * 教师主键
-     */
-    private Integer tid;
-
-    /**
      * 课程主键
      */
     private Integer cid;
 
     /**
-     * 评价主键
+     * 年级
      */
-    private Integer eid;
+    private Integer gid;
 
     /**
-     * 分数
+     * 专业
      */
-    private Integer score;
-
-    /**
-     * 评价体系主键
-     */
-    private Integer sid;
-
-    /**
-     * 学生主键
-     */
-    private Integer aid;
-
-    /**
-     * 状态
-     */
-    private Integer state;
+    private Integer major;
 
 }

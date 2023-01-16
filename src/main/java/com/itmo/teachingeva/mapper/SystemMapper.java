@@ -2,6 +2,9 @@ package com.itmo.teachingeva.mapper;
 
 import com.itmo.teachingeva.domain.System;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author chenjiahan
@@ -10,6 +13,27 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.itmo.teachingeva.domain.System
 */
 public interface SystemMapper extends BaseMapper<System> {
+
+    /**
+     * 获取所有的一级评价体系 【俄方】
+     * @return 俄方的一级指标
+     */
+    @Select("select id from e_system where kind = 1 and level = 1")
+    List<Integer> queryFirstSystemOfRussian();
+
+    /**
+     * 获取所有的一级指标 【中方】
+     * @return 中方的一级指标
+     */
+    @Select("select id from e_system where kind = 0 and level = 1")
+    List<Integer> queryFirstSystemOfChina();
+
+    /**
+     * 取出所有一级指标信息
+     */
+    @Select("select * from e_system where level = 1")
+    List<System> queryAllFirstSystem();
+
 
 }
 

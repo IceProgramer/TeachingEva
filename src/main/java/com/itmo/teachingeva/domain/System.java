@@ -26,6 +26,11 @@ public class System implements Serializable {
     private String name;
 
     /**
+     * sid
+     */
+    private Integer sid;
+
+    /**
      * 评价级别，1为一级指标，2为二级指标
      */
     private Integer level;
