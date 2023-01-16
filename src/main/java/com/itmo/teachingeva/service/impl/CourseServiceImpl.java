@@ -6,9 +6,9 @@ import com.itmo.teachingeva.domain.Course;
 import com.itmo.teachingeva.domain.Teacher;
 import com.itmo.teachingeva.dto.CourseDto;
 import com.itmo.teachingeva.exceptions.BusinessException;
-import com.itmo.teachingeva.mapper.TeacherMapper;
+import com.itmo.teachingeva.intercepts.mapper.TeacherMapper;
 import com.itmo.teachingeva.service.CourseService;
-import com.itmo.teachingeva.mapper.CourseMapper;
+import com.itmo.teachingeva.intercepts.mapper.CourseMapper;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -43,7 +43,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course>
 
     /**
      * 展示所有课程信息
-     * @return 说有课程信息
+     * @return 所有课程信息
      */
     @Override
     public List<CourseDto> listAllCourses() {

@@ -2,14 +2,13 @@ package com.itmo.teachingeva.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itmo.teachingeva.common.ErrorCode;
-import com.itmo.teachingeva.common.ResultUtils;
 import com.itmo.teachingeva.domain.StudentClass;
 import com.itmo.teachingeva.dto.StudentDto;
 import com.itmo.teachingeva.domain.Student;
 import com.itmo.teachingeva.exceptions.BusinessException;
-import com.itmo.teachingeva.mapper.StudentClassMapper;
+import com.itmo.teachingeva.intercepts.mapper.StudentClassMapper;
 import com.itmo.teachingeva.service.StudentService;
-import com.itmo.teachingeva.mapper.StudentMapper;
+import com.itmo.teachingeva.intercepts.mapper.StudentMapper;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;

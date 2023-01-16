@@ -48,7 +48,11 @@ public enum ErrorCode {
 
 
     SYSTEM_ERROR(5000, "系统内部异常", ""),
-    FILE_EMPTY(5001, "文件为空", "");
+    FILE_EMPTY(5001, "文件为空", ""),
+
+    EVALUATION_EMPTY(6000, "无评测信息", ""),
+    EVALUATION_EXIT(6001, "该评测已存在", ""),
+    EVALUATION_NO_EXIT(6001, "评测不存在", "");
 
 
 

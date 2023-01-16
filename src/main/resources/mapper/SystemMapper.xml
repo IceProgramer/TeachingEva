@@ -2,14 +2,17 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.itmo.teachingeva.intercepts.mapper.PTitleMapper">
+<mapper namespace="com.itmo.teachingeva.mapper.SystemMapper">
 
-    <resultMap id="BaseResultMap" type="com.itmo.teachingeva.domain.PTitle">
+    <resultMap id="BaseResultMap" type="com.itmo.teachingeva.domain.System">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="level" column="level" jdbcType="INTEGER"/>
+            <result property="kind" column="kind" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name
+        id,name,level,
+        kind
     </sql>
 </mapper>

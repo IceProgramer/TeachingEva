@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.itmo.teachingeva.mapper.CourseMapper">
+<mapper namespace="com.itmo.teachingeva.intercepts.mapper.CourseMapper">
 
     <resultMap id="BaseResultMap" type="com.itmo.teachingeva.domain.Course">
             <id property="id" column="id" jdbcType="INTEGER"/>
