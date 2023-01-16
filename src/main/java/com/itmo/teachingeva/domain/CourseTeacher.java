@@ -9,11 +9,11 @@ import lombok.Data;
 
 /**
  * 
- * @TableName e_course
+ * @TableName e_course_to_teacher
  */
-@TableName(value ="e_course")
+@TableName(value ="e_course_to_teacher")
 @Data
-public class Course implements Serializable {
+public class CourseTeacher implements Serializable {
     /**
      * 主键
      */
@@ -21,22 +21,12 @@ public class Course implements Serializable {
     private Integer id;
 
     /**
-     * 中文名称
+     * 课程主键
      */
-    private String cName;
+    private Integer cid;
 
     /**
-     * 英文名称
-     */
-    private String eName;
-
-    /**
-     * 专业，0为计算机，1为自动化
-     */
-    private Integer major;
-
-    /**
-     * 教师id
+     * 教师主键
      */
     private Integer tid;
 

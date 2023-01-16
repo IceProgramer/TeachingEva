@@ -100,6 +100,11 @@ public class TeacherController {
         return ResultUtils.success(true);
     }
 
+    /**
+     * 获取单条教师信息
+     * @param teacherDto 教师id
+     * @return 教师信息
+     */
     @GetMapping("/info")
     public BaseResponse<TeacherDto> getTeacher(@RequestBody TeacherDto teacherDto) {
         Integer id = teacherDto.getId();
@@ -120,8 +125,8 @@ public class TeacherController {
 
     /**
      * Excel文件批量上传教师信息
-     * @param file
-     * @return
+     * @param file excel
+     * @return 保存成功
      */
     @PostMapping("/excel/import")
     public BaseResponse<Boolean> saveExcel(@RequestParam("file") MultipartFile file) {
@@ -135,6 +140,11 @@ public class TeacherController {
         return ResultUtils.success(true);
     }
 
+    /**
+     * 下载示例Excel
+     * @param response 请求
+     * @return 示例
+     */
     @GetMapping("/excel/export")
     public BaseResponse<Boolean> exportExcel(HttpServletResponse response) {
 

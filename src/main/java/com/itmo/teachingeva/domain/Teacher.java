@@ -15,8 +15,9 @@ import lombok.Data;
 @Data
 public class Teacher implements Serializable {
     /**
-     * 
+     * 主键
      */
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**

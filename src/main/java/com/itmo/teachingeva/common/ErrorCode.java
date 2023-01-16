@@ -22,6 +22,8 @@ public enum ErrorCode {
     PASSWORD_FORMAT_ERROR(2004, "密码格式不规范！", ""),
     USERNAME_EXIT(2005, "账户已存在！", ""),
 
+    NO_PERMISSION(2006, "您没有权限！", ""),
+
     /**
      * 学生相关
      */
@@ -37,8 +39,12 @@ public enum ErrorCode {
     TEACHER_EXIT(4001, "教师已存在", ""),
     TEACHER_NO_EXIT(4002, "教师不存在", ""),
 
-    NO_PERMISSION(2006, "您没有权限！", ""),
-
+    /**
+     * 课程相关
+     */
+    COURSE_EMPTY(6000, "无课程信息", ""),
+    COURSE_EXIT(6001, "该课程已存在", ""),
+    COURSE_NO_EXIT(6002, "课程不存在", ""),
 
 
     SYSTEM_ERROR(5000, "系统内部异常", ""),
