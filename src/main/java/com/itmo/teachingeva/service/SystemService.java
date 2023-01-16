@@ -2,6 +2,9 @@ package com.itmo.teachingeva.service;
 
 import com.itmo.teachingeva.domain.System;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.itmo.teachingeva.dto.SystemDto;
+
+import java.util.List;
 
 /**
 * @author chenjiahan
@@ -10,4 +13,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SystemService extends IService<System> {
 
+    /**
+     * 展示所有的俄方评价体系
+     */
+    List<SystemDto> listAllFirstSystemOfRussian();
+
+    /**
+     * 展示所有的中方评价体系
+     */
+    List<SystemDto> listAllFirstSystemOfChina();
 }

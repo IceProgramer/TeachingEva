@@ -34,6 +34,18 @@ public interface SystemMapper extends BaseMapper<System> {
     @Select("select * from e_system where level = 1")
     List<System> queryAllFirstSystem();
 
+    /**
+     * 取出所有的中方指标
+     */
+    @Select("select * from e_system where kind = 0")
+    List<System> queryAllChinaSystem();
+
+    /**
+     * 取出所有的俄方指标
+     */
+    @Select("select * from e_system where kind = 1")
+    List<System> queryAllRussianSystem();
+
 
 }
 

@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 public class System implements Serializable {
     /**
-     * 
+     * id
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
