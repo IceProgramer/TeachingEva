@@ -3,7 +3,6 @@ package com.itmo.teachingeva.service;
 import com.itmo.teachingeva.domain.Evaluate;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.itmo.teachingeva.dto.EvaluateDto;
-import com.itmo.teachingeva.dto.TeacherDto;
 
 import java.util.List;
 
@@ -49,6 +48,6 @@ public interface EvaluateService extends IService<Evaluate> {
      * @param id 评测的id
      * @return 评测信息
      */
-    TeacherDto getEvaluation(Integer id);
+    EvaluateDto getEvaluation(Integer id);
 
 }

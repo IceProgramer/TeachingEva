@@ -3,9 +3,7 @@ package com.itmo.teachingeva.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itmo.teachingeva.common.ErrorCode;
 import com.itmo.teachingeva.domain.*;
-import com.itmo.teachingeva.domain.System;
 import com.itmo.teachingeva.dto.EvaluateDto;
-import com.itmo.teachingeva.dto.TeacherDto;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.mapper.*;
 import com.itmo.teachingeva.service.EvaluateService;
@@ -15,8 +13,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
 * @author chenjiahan
@@ -45,6 +41,12 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
     @Resource
     private SystemMapper systemMapper;
 
+    @Resource
+    private MarkHistoryMapper markHistoryMapper;
+
+    @Resource
+    private ScoreHistoryMapper scoreHistoryMapper;
+
     /**
      * 展示所有评测信息
      * @return 所有评测信息
@@ -71,7 +73,7 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
      * 发布新的评测
      * @param evaluateDto 评测信息
      * @return 添加成功
-     *///todo 发布评测后向各位学生发布相应的评测
+     */
     @Override
     public Boolean addEvaluation(EvaluateDto evaluateDto) {
         // 对评测信息进行校验
@@ -100,19 +102,59 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
         return save;
     }
 
+    /**
+     * 删除某次测评 =》 删除测评表  =》 删除测评记录 =》 删除最终结果 【权限问题非常关键，涉及到三张表的同时删除】
+     * @param evaluateDto 评测的id
+     * @return
+     */
     @Override
     public Boolean deleteEvaluation(EvaluateDto evaluateDto) {
-        return null;
+        Integer eid = evaluateDto.getId();
+
+        // 删除所有学生的测评记录
+        markHistoryMapper.deleteByEid(eid);
+
+        // 删除所有的最终结果
+        scoreHistoryMapper.deleteByEid(eid);
+
+        boolean delete = this.removeById(eid);
+
+        return delete;
     }
 
+    /**
+     * 更新评测信息
+     * @param evaluateDto 评测信息
+     * @return 更新成功
+     */
     @Override
     public Boolean updateEvaluation(EvaluateDto evaluateDto) {
-        return null;
+        Evaluate evaluate = new Evaluate();
+
+        BeanUtils.copyProperties(evaluateDto, evaluate);
+        boolean update = this.updateById(evaluate);
+
+        return update;
     }
 
+    /**
+     * 获取某个评测的信息
+     * @param id 评测的id
+     * @return
+     */
     @Override
-    public TeacherDto getEvaluation(Integer id) {
-        return null;
+    public EvaluateDto getEvaluation(Integer id) {
+        Evaluate evaluate = this.getById(id);
+
+        if (evaluate == null) {
+            throw new BusinessException(ErrorCode.EVALUATION_NO_EXIT);
+        }
+
+        // 将do转为dto传到前台
+        EvaluateDto evaluateInfo = new EvaluateDto();
+        BeanUtils.copyProperties(evaluate, evaluateInfo);
+
+        return evaluateInfo;
     }
 
     /**
@@ -127,19 +169,20 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
         // 取出所有老师信息
         List<Teacher> teacherList = teacherMapper.queryTeacherName();
 
-        // key为主键 value为教师名称的map => 为了减少查表次数
-        Map<Integer, String> teacherMap = teacherList.stream().collect(Collectors.toMap(Teacher::getId, Teacher::getName));
-
-        // 取出所有一级指标信息
-        List<System> systemList = systemMapper.queryAllFirstSystem();
-
-        // key主键为国籍(0为中方，1为俄方)，value值为一级指标的map
-        Map<Integer, Integer> systemMap = systemList.stream().collect(Collectors.toMap(System::getKind, System::getId));
 
         // 列出所有的一级评价体系【俄方】
         List<Integer> RussiaFirstSystem = systemMapper.queryFirstSystemOfRussian();
+        // 列出所有的一级评价体系 【中方】
         List<Integer> ChinaFirstSystem = systemMapper.queryFirstSystemOfChina();
 
+        /**
+         * 分发的顺序
+         * 同一个课程
+         * 1. 按照学生主键，为第一层循环
+         * 2. 按照教师主键 =》 教师有不同的国籍，不同国籍的老师拥有不同的一级指标
+         *      a. 按照国籍划分
+         * 总计四层循环
+         */
         for (CourseGrade courseGrade : courseGradeList) {
             // 获取固定课程信息
             Integer cid = courseGrade.getCid();     // 课程主键
@@ -191,18 +234,14 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
                             markHistoryList.add(markHistory);
                         }
                     }
-
                 }
             }
 
         }
 
-
         return true;
     }
 
 }
-
-
 
 

@@ -2,6 +2,7 @@ package com.itmo.teachingeva.mapper;
 
 import com.itmo.teachingeva.domain.MarkHistory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
 
 /**
 * @author chenjiahan
@@ -11,6 +12,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface MarkHistoryMapper extends BaseMapper<MarkHistory> {
 
+    /**
+     * 根据总的一次评价来删除所有该评价下的记录
+     * @param eid 评价id
+     */
+   @Delete("delete * from e_mark_history where eid = #{eid}")
+    void deleteByEid(Integer eid);
 }
 
 
