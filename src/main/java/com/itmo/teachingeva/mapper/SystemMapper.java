@@ -2,6 +2,7 @@ package com.itmo.teachingeva.mapper;
 
 import com.itmo.teachingeva.domain.System;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -45,6 +46,18 @@ public interface SystemMapper extends BaseMapper<System> {
      */
     @Select("select * from e_system where kind = 1")
     List<System> queryAllRussianSystem();
+
+    /**
+     * 删除所有俄方指标
+     */
+    @Delete("delete * from e_system where kind = 1")
+    void deleteRussianSystemByKind();
+
+    /**
+     * 删除所有中方指标
+     */
+    @Delete("delete * from e_system where kind = 0")
+    void deleteChinaSystemByKind();
 
 
 }

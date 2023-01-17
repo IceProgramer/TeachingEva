@@ -31,6 +31,12 @@ public interface CourseMapper extends BaseMapper<Course> {
      */
     @Select("select tid from e_course where c_name = #{name};")
     List<Integer> queryTeacherByName(String name);
+
+    /**
+     * 查找所有课程信息
+     */
+    @Select("Select * from e_course")
+    List<Course> queryAllCourse();
 }
 
 

@@ -7,12 +7,16 @@ import com.itmo.teachingeva.dto.EvaluateDto;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.mapper.*;
 import com.itmo.teachingeva.service.EvaluateService;
+import com.itmo.teachingeva.service.MarkHistoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.lang.System;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
 * @author chenjiahan
@@ -46,6 +50,10 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
 
     @Resource
     private ScoreHistoryMapper scoreHistoryMapper;
+
+
+    @Resource
+    private MarkHistoryService markHistoryService;
 
     /**
      * 展示所有评测信息
@@ -161,14 +169,22 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
      * 按照课程年级表来为每一个学生分配评价
      * @return 分配成功
      */
-    public boolean handOutEvaluations(Integer eid) {
+    public Boolean handOutEvaluations(Integer eid) {
 
         // 1.列出所有课程相关的年级信息 => course_to_grade
         List<CourseGrade> courseGradeList = courseGradeMapper.listAllCourseToGrade();
 
         // 取出所有老师信息
         List<Teacher> teacherList = teacherMapper.queryTeacherName();
+        // tid => identity
+        Map<Integer, Integer> teacherMap = teacherList.stream().collect(Collectors.toMap(Teacher::getId, Teacher::getIdentity));
 
+        // 取出所有课程信息
+        List<Course> courseList = courseMapper.queryAllCourse();
+
+        // 将课程list转为map
+        // 键值为主键id，值为课程名称
+        Map<Integer, String> courseMap = courseList.stream().collect(Collectors.toMap(Course::getId, Course::getCName));
 
         // 列出所有的一级评价体系【俄方】
         List<Integer> RussiaFirstSystem = systemMapper.queryFirstSystemOfRussian();
@@ -182,6 +198,7 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
          * 2. 按照教师主键 =》 教师有不同的国籍，不同国籍的老师拥有不同的一级指标
          *      a. 按照国籍划分
          * 总计四层循环
+         * 【不能在循环中进行查库】
          */
         for (CourseGrade courseGrade : courseGradeList) {
             // 获取固定课程信息
@@ -189,10 +206,11 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
             Integer gid = courseGrade.getGid();     // 年级
             Integer major = courseGrade.getMajor();     // 专业
 
-            // 通过courseId来找到courseName（课程名称）
-            String courseName = courseMapper.queryCourseName(cid);  // 对应课程的id
+            // 通过courseId来找到courseName（课程名称） => 用键值对进行查找
+            String courseName = courseMap.get(cid);  // 课程名称
 
             // 根据课程名称找到所有老师(List)
+
             List<Integer> teacherId = courseMapper.queryTeacherByName(courseName);
 
             // 根据以上的条件分别来找到学生分发问卷 => 问卷记录在e_mark_history state默认值为0
@@ -206,14 +224,15 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
             for (Integer Aid : studentId) {
                 // 第二层循环 老师主键
                 for (Integer Tid : teacherId) {
-                    MarkHistory markHistory = new MarkHistory();
-                    markHistory.setTid(Tid);    // 教师主键
+
 
                     // 判断教师国籍 0俄方 1中方
-                    Integer identity = teacherList.get(Tid).getIdentity();
+                    Integer identity = teacherMap.get(Tid);
                     if (identity == 0) {
                         // 俄方的一级指标
                         for (Integer sid : RussiaFirstSystem) {
+                            MarkHistory markHistory = new MarkHistory();
+                            markHistory.setTid(Tid);    // 教师主键
                             markHistory.setCid(cid);    // 课程主键
                             markHistory.setEid(eid);    // 评价主键
                             markHistory.setScore(0);    // 分数
@@ -221,11 +240,14 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
                             markHistory.setAid(Aid);      // 学生主键
 
                             markHistoryList.add(markHistory);
+
                         }
                     }
                     if (identity == 1) {
                         // 中方的一级指标
                         for (Integer sid : ChinaFirstSystem) {
+                            MarkHistory markHistory = new MarkHistory();
+                            markHistory.setTid(Tid);    // 教师主键
                             markHistory.setCid(cid);    // 课程主键
                             markHistory.setEid(eid);    // 评价主键
                             markHistory.setScore(0);    // 分数
@@ -237,6 +259,8 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
                 }
             }
 
+            System.out.println(markHistoryList);
+            markHistoryService.saveBatch(markHistoryList);
         }
 
         return true;

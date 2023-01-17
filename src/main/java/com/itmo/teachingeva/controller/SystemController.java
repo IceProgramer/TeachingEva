@@ -7,9 +7,7 @@ import com.itmo.teachingeva.dto.SystemDto;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.service.SystemService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -61,5 +59,19 @@ public class SystemController {
         return ResultUtils.success(allSystemInfo);
     }
 
+    /**
+     * 更改俄方系统
+     */
+    @PostMapping("/edit/russian")
+    public BaseResponse<Boolean> updateRussianSystem(@RequestBody SystemDto systemDto) {
+        return null;
+    }
 
+    /**
+     * 更改中方系统
+     */
+    @PostMapping("/edit/china")
+    public BaseResponse<Boolean> updateChinaSystem(@RequestBody SystemDto systemDto) {
+        return null;
+    }
 }

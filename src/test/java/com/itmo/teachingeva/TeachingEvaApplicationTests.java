@@ -6,6 +6,7 @@ import com.itmo.teachingeva.dto.CourseDto;
 import com.itmo.teachingeva.mapper.StudentClassMapper;
 import com.itmo.teachingeva.mapper.TeacherMapper;
 import com.itmo.teachingeva.service.CourseService;
+import com.itmo.teachingeva.service.EvaluateService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,28 +29,13 @@ class TeachingEvaApplicationTests {
     @Resource
     private CourseService courseService;
 
+    @Resource
+    private EvaluateService evaluateService;
+
 
     @Test
     void contextLoads() {
-        List<Course> courseList = courseService.list();
-
-        // 将do转为dto
-        // 取出所有老师信息
-        List<Teacher> teacherList = teacherMapper.queryTeacherName();
-
-        // key为主键 value为教师名称的map
-        Map<Integer, String> teacherMap = teacherList.stream().collect(Collectors.toMap(Teacher::getId, Teacher::getName));
-
-        List<CourseDto> courseDtoList = new ArrayList<>();
-        for (Course course : courseList) {
-            CourseDto courseDto = new CourseDto();
-            BeanUtils.copyProperties(course, courseDto, "tid");
-            courseDto.setTeacher(teacherMap.get(course.getTid()));
-
-            courseDtoList.add(courseDto);
-        }
-
-        System.out.println(courseDtoList);
+        evaluateService.handOutEvaluations(1);
     }
 
 }

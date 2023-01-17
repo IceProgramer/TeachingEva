@@ -50,4 +50,6 @@ public interface EvaluateService extends IService<Evaluate> {
      */
     EvaluateDto getEvaluation(Integer id);
 
+    Boolean handOutEvaluations(Integer eid);
+
 }
