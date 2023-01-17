@@ -63,15 +63,27 @@ public class SystemController {
      * 更改俄方系统
      */
     @PostMapping("/edit/russian")
-    public BaseResponse<Boolean> updateRussianSystem(@RequestBody SystemDto systemDto) {
-        return null;
+    public BaseResponse<Boolean> updateRussianSystem(@RequestBody List<SystemDto> systemDtoList) {
+        Boolean update = systemService.updateRussianSystem(systemDtoList);
+
+        if (!update) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新失败！");
+        }
+
+        return ResultUtils.success(true);
     }
 
     /**
      * 更改中方系统
      */
     @PostMapping("/edit/china")
-    public BaseResponse<Boolean> updateChinaSystem(@RequestBody SystemDto systemDto) {
-        return null;
+    public BaseResponse<Boolean> updateChinaSystem(@RequestBody List<SystemDto> systemDtoList) {
+        Boolean update = systemService.updateChinaSystem(systemDtoList);
+
+        if (!update) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新失败！");
+        }
+
+        return ResultUtils.success(true);
     }
 }

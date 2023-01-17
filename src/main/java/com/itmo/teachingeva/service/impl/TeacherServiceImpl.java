@@ -11,6 +11,7 @@ import com.itmo.teachingeva.mapper.PTitleMapper;
 import com.itmo.teachingeva.mapper.PositionMapper;
 import com.itmo.teachingeva.service.TeacherService;
 import com.itmo.teachingeva.mapper.TeacherMapper;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -228,6 +229,43 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher>
             throw new RuntimeException(e);
         }
 
+    }
+
+    @Override
+    public List<TeacherDto> getChinaTeacher() {
+
+        List<Teacher> teacherList = teacherMapper.queryAllChinaTeacher();
+
+        if (teacherList == null) {
+            throw new BusinessException(ErrorCode.TEACHER_EMPTY, "没有查询到中方教师信息");
+        }
+
+        List<TeacherDto> teacherDtoList = teacherList.stream().map(teacher -> {
+            TeacherDto teacherDto = new TeacherDto();
+            BeanUtils.copyProperties(teacher, teacherDto);
+            return teacherDto;
+        }).collect(Collectors.toList());
+
+
+        return teacherDtoList;
+    }
+
+    @Override
+    public List<TeacherDto> getRussianTeacher() {
+
+        List<Teacher> teacherList = teacherMapper.queryAllRussianTeacher();
+
+        if (teacherList == null) {
+            throw new BusinessException(ErrorCode.TEACHER_EMPTY, "没有查询到俄方教师信息");
+        }
+
+        List<TeacherDto> teacherDtoList = teacherList.stream().map(teacher -> {
+            TeacherDto teacherDto = new TeacherDto();
+            BeanUtils.copyProperties(teacher, teacherDto);
+            return teacherDto;
+        }).collect(Collectors.toList());
+
+        return teacherDtoList;
     }
 }
 

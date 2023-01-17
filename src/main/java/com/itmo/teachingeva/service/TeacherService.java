@@ -59,4 +59,13 @@ public interface TeacherService extends IService<Teacher> {
      */
     Boolean excelImport(MultipartFile file);
 
+    /**
+     * 查询所有的中方老师信息
+     */
+    List<TeacherDto> getChinaTeacher();
+
+    /**
+     * 查询所有俄方老师信息
+     */
+    List<TeacherDto> getRussianTeacher();
 }

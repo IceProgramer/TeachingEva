@@ -47,6 +47,19 @@ public interface TeacherMapper extends BaseMapper<Teacher> {
     @Select("select name from e_teacher where id = #{id}")
     String queryTeacherNameById(Integer id);
 
+    /**
+     * 查询所有中方教师
+     */
+    @Select("select * from e_teacher where identity = 1")
+    List<Teacher> queryAllChinaTeacher();
+
+    /**
+     * 查询所有俄方教师
+     */
+    @Select("select * from e_teacher where identity = 0")
+    List<Teacher> queryAllRussianTeacher();
+
+
 }
 
 

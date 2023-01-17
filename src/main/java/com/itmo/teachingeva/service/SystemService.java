@@ -22,4 +22,14 @@ public interface SystemService extends IService<System> {
      * 展示所有的中方评价体系
      */
     List<SystemDto> listAllFirstSystemOfChina();
+
+    /**
+     * 更改俄方系统
+     */
+    Boolean updateRussianSystem(List<SystemDto> systemDtoList);
+
+    /**
+     * 更改中方系统
+     */
+    Boolean updateChinaSystem(List<SystemDto> systemDtoList);
 }

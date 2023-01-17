@@ -2,8 +2,8 @@ package com.itmo.teachingeva.mapper;
 
 import com.itmo.teachingeva.domain.System;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ public interface SystemMapper extends BaseMapper<System> {
      * 获取所有的一级评价体系 【俄方】
      * @return 俄方的一级指标
      */
-    @Select("select id from e_system where kind = 1 and level = 1")
+    @Select("select sid from e_system where kind = 1 and level = 1")
     List<Integer> queryFirstSystemOfRussian();
 
     /**
      * 获取所有的一级指标 【中方】
      * @return 中方的一级指标
      */
-    @Select("select id from e_system where kind = 0 and level = 1")
+    @Select("select sid from e_system where kind = 0 and level = 1")
     List<Integer> queryFirstSystemOfChina();
 
     /**
@@ -48,17 +48,10 @@ public interface SystemMapper extends BaseMapper<System> {
     List<System> queryAllRussianSystem();
 
     /**
-     * 删除所有俄方指标
+     * 更新俄方的数据
      */
-    @Delete("delete * from e_system where kind = 1")
-    void deleteRussianSystemByKind();
-
-    /**
-     * 删除所有中方指标
-     */
-    @Delete("delete * from e_system where kind = 0")
-    void deleteChinaSystemByKind();
-
+    @Update("update e_system set name = #{name} where id = #{id}")
+    Boolean updateRussianName(String name, Integer id);
 
 }
 

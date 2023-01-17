@@ -7,6 +7,7 @@ import com.itmo.teachingeva.dto.SystemDto;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.service.SystemService;
 import com.itmo.teachingeva.mapper.SystemMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.List;
 * @createDate 2023-01-16 22:23:05
 */
 @Service
+@Slf4j
 public class SystemServiceImpl extends ServiceImpl<SystemMapper, System>
     implements SystemService{
 
@@ -57,6 +59,57 @@ public class SystemServiceImpl extends ServiceImpl<SystemMapper, System>
         BeanUtils.copyProperties(allChinaSystem, systemDtoList);
 
         return systemDtoList;
+    }
+
+    /**
+     * 更新新的俄方数据
+     * @param systemDtoList
+     * @return
+     */
+    @Override
+    public Boolean updateRussianSystem(List<SystemDto> systemDtoList) {
+        for (SystemDto systemDto : systemDtoList) {
+            Integer id = systemDto.getId();     // 获取id
+            System system = this.getById(id);
+            // 对信息进行校验
+            // a. 判断更新的内容是否为俄方数据
+            if (system.getKind() != 1) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "该信息为中方信息， 请重新检查更改对象");
+            }
+            // b. 判断更新数据是否与原来数据相同
+            String name = system.getName();
+            if (!name.equals(systemDto.getName())) {
+                // 更新数据
+                Boolean update = systemMapper.updateRussianName(name, id);
+                if (!update) {
+                    log.info("system库中第{}条数据更新失败", id);
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean updateChinaSystem(List<SystemDto> systemDtoList) {
+        for (SystemDto systemDto : systemDtoList) {
+            Integer id = systemDto.getId();     // 获取id
+            System system = this.getById(id);
+            // 对信息进行校验
+            // a. 判断更新的内容是否为俄方数据
+            if (system.getKind() != 0) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "该信息为俄方信息， 请重新检查更改对象");
+            }
+            // b. 判断更新数据是否与原来数据相同
+            String name = system.getName();
+            if (!name.equals(systemDto.getName())) {
+                // 更新数据
+                Boolean update = systemMapper.updateRussianName(name, id);
+                if (!update) {
+                    log.info("system库中第{}条数据更新失败", id);
+                }
+            }
+        }
+        return true;
     }
 }
 

@@ -2,7 +2,9 @@ package com.itmo.teachingeva.mapper;
 
 import com.itmo.teachingeva.domain.Student;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -38,6 +40,14 @@ public interface StudentMapper extends BaseMapper<Student> {
     List<Integer> getStudentByGradeAndMajor(Integer grade, Integer major);
 
 
+    /**
+     * 年级自动加1
+     */
+    @Update("update e_student set grade = grade + 1")
+    void addGradeByAuto();
+
+    @Delete("delete * from e_student where grade > 8")
+    void deleteStudentGradeThan8();
 }
 
 

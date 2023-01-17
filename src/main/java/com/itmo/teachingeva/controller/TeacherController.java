@@ -168,4 +168,34 @@ public class TeacherController {
         return ResultUtils.success(true);
     }
 
+    /**
+     * 获取中方所有教师信息
+     * @return 中方教师信息
+     */
+    @GetMapping("/info/china")
+    public BaseResponse<List<TeacherDto>> getAllChinaTeacher() {
+        List<TeacherDto> ChinaTeacherInfo = teacherService.getChinaTeacher();
+
+        if (ChinaTeacherInfo == null) {
+            throw new BusinessException(ErrorCode.TEACHER_EMPTY, "没有查询到中方教师！");
+        }
+        return ResultUtils.success(ChinaTeacherInfo);
+    }
+
+    /**
+     * 获取所有俄方教师信息
+     * @return 俄方教师信息
+     */
+    @GetMapping("/info/russian")
+    public BaseResponse<List<TeacherDto>> getAllRussianTeacher() {
+        List<TeacherDto> RussianTeacherInfo = teacherService.getRussianTeacher();
+
+        if (RussianTeacherInfo == null) {
+            throw new BusinessException(ErrorCode.TEACHER_EMPTY, "没有查询到俄方教师！");
+        }
+        return ResultUtils.success(RussianTeacherInfo);
+    }
+
+
+
 }
