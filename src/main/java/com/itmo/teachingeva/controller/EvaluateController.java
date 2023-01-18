@@ -6,6 +6,7 @@ import com.itmo.teachingeva.common.ResultUtils;
 import com.itmo.teachingeva.domain.Evaluate;
 import com.itmo.teachingeva.dto.CourseDto;
 import com.itmo.teachingeva.dto.EvaluateDto;
+import com.itmo.teachingeva.dto.StudentDto;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.service.EvaluateService;
 import lombok.extern.slf4j.Slf4j;
@@ -122,5 +123,34 @@ public class EvaluateController {
         log.info("获取评测信息成功");
         return ResultUtils.success(evaluateInfo);
     }
+
+    /**
+     * 返回本次评测已完成名单
+     */
+    @GetMapping("/detail/done/{eid}")
+    public BaseResponse<List<StudentDto>> getDoneStudents(@PathVariable Integer eid) {
+        List<StudentDto> studentDone = evaluateService.studentsDoneEvaluation(eid);
+
+        if (studentDone == null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "未查询到相关信息");
+        }
+
+        return ResultUtils.success(studentDone);
+    }
+
+    /**
+     * 返回本次评测未完成名单
+     */
+    @GetMapping("/detail/undone/{eid}")
+    public BaseResponse<List<StudentDto>> getUndoneStudents(@PathVariable Integer eid) {
+        List<StudentDto> studentUndone = evaluateService.studentsUndoneEvaluation(eid);
+
+        if (studentUndone == null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "未查询到相关信息");
+        }
+
+        return ResultUtils.success(studentUndone);
+    }
+
 
 }

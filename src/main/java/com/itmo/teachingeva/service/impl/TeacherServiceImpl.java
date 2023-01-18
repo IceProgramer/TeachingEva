@@ -107,7 +107,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher>
         BeanUtils.copyProperties(teacherDto, teacher, "position", "pTitle");
         // 将职称和职位按照主键存在数据库中
         teacher.setPosition(positionMapper.queryPositionId(teacherDto.getPosition()));
-        teacher.setPTitle(pTitleMapper.queryPTileId(teacherDto.getPosition()));
+        teacher.setPTitle(pTitleMapper.queryPTileId(teacherDto.getPTitle()));
 
         boolean save = this.save(teacher);
 
@@ -137,7 +137,15 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher>
      */
     @Override
     public Boolean updateTeacher(TeacherDto teacherDto) {
+        // 判断教师是否存在
+        Teacher teacherExit = this.getById(teacherDto.getId());
+
+        if (teacherExit == null) {
+            throw new BusinessException(ErrorCode.TEACHER_NO_EXIT, "查无此人");
+        }
+
         Teacher teacher = new Teacher();
+
 
         BeanUtils.copyProperties(teacherDto, teacher, "position", "pTitle");
         teacher.setPosition(positionMapper.queryPositionId(teacherDto.getPosition()));

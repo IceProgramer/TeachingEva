@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.itmo.teachingeva.common.ErrorCode;
 import com.itmo.teachingeva.domain.*;
 import com.itmo.teachingeva.dto.EvaluateDto;
+import com.itmo.teachingeva.dto.StudentDto;
 import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.mapper.*;
 import com.itmo.teachingeva.service.EvaluateService;
@@ -41,6 +42,9 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
 
     @Resource
     private StudentMapper studentMapper;
+
+    @Resource
+    private StudentClassMapper studentClassMapper;
 
     @Resource
     private SystemMapper systemMapper;
@@ -264,6 +268,73 @@ public class EvaluateServiceImpl extends ServiceImpl<EvaluateMapper, Evaluate>
         }
 
         return true;
+    }
+
+    /**
+     * 统计测评未完成学生
+     * @return
+     */
+    @Override
+    public List<StudentDto> studentsDoneEvaluation(Integer eid) {
+        // 获取所有学生信息
+        List<Student> studentList = studentMapper.getAllStudents();
+
+        // 完成学生集合
+        List<StudentDto> studentDone = new ArrayList<>();
+
+        List<StudentClass> classList = studentClassMapper.queryClassToList();
+        Map<Integer, String> classMap = classList.stream().collect(Collectors.toMap(StudentClass::getId, StudentClass::getCid));
+
+        // 查找学生是否全部完成一级评价
+        for (Student student : studentList) {
+            Integer id = student.getId();   // 学生id
+            // 查找该学生是否有一级指标还没有完成
+            // 如果全部完成 state的总数 == 记录总数
+            List<Integer> stateByAid = markHistoryMapper.getStateByAid(id, eid);
+            Integer sum = stateByAid.stream().reduce(Integer::sum).orElse(0);
+            if (sum == stateByAid.size()) {
+                // 该学生完成所有的评测
+                StudentDto studentInfo = new StudentDto();
+                BeanUtils.copyProperties(student, studentInfo, "cid");
+                studentInfo.setCid(classMap.get(student.getCid()));
+                studentDone.add(studentInfo);
+            }
+        }
+        return studentDone;
+    }
+
+    /**
+     * 返回所有未完成的学生名单
+     * @return
+     */
+    @Override
+    public List<StudentDto> studentsUndoneEvaluation(Integer eid) {
+        // 获取所有学生信息
+        List<Student> studentList = studentMapper.getAllStudents();
+
+        // 完成学生集合
+        List<StudentDto> studentUndone = new ArrayList<>();
+
+        List<StudentClass> classList = studentClassMapper.queryClassToList();
+        Map<Integer, String> classMap = classList.stream().collect(Collectors.toMap(StudentClass::getId, StudentClass::getCid));
+
+        // 查找学生是否全部完成一级评价
+        for (Student student : studentList) {
+            Integer id = student.getId();   // 学生id
+            // 查找该学生是否有一级指标还没有完成
+            // 如果全部完成 state的总数 == 记录总数
+            List<Integer> stateByAid = markHistoryMapper.getStateByAid(id, eid);
+            Integer sum = stateByAid.stream().reduce(Integer::sum).orElse(0);
+            if (sum != stateByAid.size()) {
+                // 该学生完成所有的评测
+                StudentDto studentInfo = new StudentDto();
+                BeanUtils.copyProperties(student, studentInfo, "cid");
+                studentInfo.setCid(classMap.get(student.getCid()));
+                studentUndone.add(studentInfo);
+            }
+        }
+        return studentUndone;
+
     }
 
 }

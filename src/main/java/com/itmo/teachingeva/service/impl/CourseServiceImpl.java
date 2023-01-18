@@ -124,6 +124,13 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course>
      */
     @Override
     public Boolean updateCourse(CourseDto courseDto) {
+        // 判断课程是否存在
+        Course courseExit = this.getById(courseDto.getId());
+
+        if (courseExit == null) {
+            throw new BusinessException(ErrorCode.COURSE_NO_EXIT, "没有该课程");
+        }
+
         Course course = new Course();
 
         BeanUtils.copyProperties(courseDto, course, "teacher");

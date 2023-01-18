@@ -26,7 +26,7 @@ public class JwtUtil {
         //1.头部默认
         // 指定token过期时间
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 20);  //20min
+        calendar.add(Calendar.MINUTE, 20);  // 20min
         JWTCreator.Builder builder = JWT.create();
         // 2.构建payload
         payload.forEach(builder::withClaim);

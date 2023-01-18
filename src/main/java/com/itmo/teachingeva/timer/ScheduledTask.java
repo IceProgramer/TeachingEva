@@ -19,7 +19,7 @@ public class ScheduledTask {
     /**
      * 自动增加学期
      */
-    @Scheduled(cron = "0 0 0 31 7/1 0 *")  // 每年的7月31日和1月31日自动执行
+    @Scheduled(cron = "0 0 0 31 7/1 0")  // 每年的7月31日和1月31日自动执行
     private void configureTasks() {
         // 学期自动加1
         studentMapper.addGradeByAuto();

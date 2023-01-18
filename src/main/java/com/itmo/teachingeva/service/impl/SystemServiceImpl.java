@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author chenjiahan
@@ -41,6 +42,11 @@ public class SystemServiceImpl extends ServiceImpl<SystemMapper, System>
 
         List<SystemDto> systemDtoList = new ArrayList<>();
         BeanUtils.copyProperties(allRussianSystem, systemDtoList);
+        systemDtoList = allRussianSystem.stream().map(system -> {
+            SystemDto systemDto = new SystemDto();
+            BeanUtils.copyProperties(system, systemDto);
+            return systemDto;
+        }).collect(Collectors.toList());
 
         return systemDtoList;
     }
@@ -57,6 +63,12 @@ public class SystemServiceImpl extends ServiceImpl<SystemMapper, System>
 
         List<SystemDto> systemDtoList = new ArrayList<>();
         BeanUtils.copyProperties(allChinaSystem, systemDtoList);
+        systemDtoList = allChinaSystem.stream().map(system -> {
+            SystemDto systemDto = new SystemDto();
+            BeanUtils.copyProperties(system, systemDto);
+            return systemDto;
+        }).collect(Collectors.toList());
+
 
         return systemDtoList;
     }

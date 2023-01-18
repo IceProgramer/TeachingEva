@@ -127,16 +127,32 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student>
     }
 
     /**
-     * 删除学生数据
+     * 更新学生数据
      *
      * @param studentDto 学生的id
-     * @return 删除成功
+     * @return 更新成功
      */
     @Override
     public Boolean updateStudent(StudentDto studentDto) {
+
+        // 判断用户是否存在
+        Student studentExit = this.getById(studentDto.getId());
+
+        if (studentExit == null) {
+            throw new BusinessException(ErrorCode.STUDENT_NO_EXIT, "查无此人");
+        }
+
         Student student = new Student();
 
-        BeanUtils.copyProperties(studentDto, student);
+        // cid 需要进行转换储存
+        BeanUtils.copyProperties(studentDto, student, "cid");
+
+        student.setCid(studentClassMapper.queryClassId(studentDto.getCid()));
+
+        // 判断学号是否修改 => 密码需要重新加密储存
+        if (!student.getSid().equals(studentExit.getSid())) {
+            student.setPassword(DigestUtils.md5DigestAsHex(student.getSid().getBytes(StandardCharsets.UTF_8)));
+        }
 
         this.updateById(student);
 

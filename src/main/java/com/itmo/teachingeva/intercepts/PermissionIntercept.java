@@ -3,8 +3,6 @@ package com.itmo.teachingeva.intercepts;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.itmo.teachingeva.common.ErrorCode;
-import com.itmo.teachingeva.exceptions.BusinessException;
 import com.itmo.teachingeva.utilts.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -29,7 +27,7 @@ public class PermissionIntercept implements HandlerInterceptor {
             String username = dj.getClaim("username").asString();
             String id = dj.getClaim("id").asString();
 
-            // 计算当前令牌是否超过授权时间的一般，超过后自动续期 -- 10s
+            // 计算当前令牌是否超过授权时间的一般，超过后自动续期
             Long expTime = dj.getExpiresAt().getTime();
             Long iatTime = dj.getIssuedAt().getTime();
             Long nowTime = new Date().getTime();

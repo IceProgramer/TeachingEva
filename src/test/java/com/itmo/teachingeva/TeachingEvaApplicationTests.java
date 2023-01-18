@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,22 +21,14 @@ import java.util.stream.Collectors;
 @SpringBootTest
 class TeachingEvaApplicationTests {
 
-    @Resource
-    private StudentClassMapper studentClassMapper;
-
-    @Resource
-    private TeacherMapper teacherMapper;
-
-    @Resource
-    private CourseService courseService;
-
-    @Resource
-    private EvaluateService evaluateService;
 
 
     @Test
     void contextLoads() {
-        evaluateService.handOutEvaluations(1);
+        List<Integer> list = Arrays.asList(1, 2, 4, 5, 0);
+        Integer integer = list.stream().reduce(Integer::sum).orElse(0);
+        System.out.println(list.size());
+        System.out.println(integer);
     }
 
 }

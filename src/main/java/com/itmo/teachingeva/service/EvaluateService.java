@@ -3,6 +3,7 @@ package com.itmo.teachingeva.service;
 import com.itmo.teachingeva.domain.Evaluate;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.itmo.teachingeva.dto.EvaluateDto;
+import com.itmo.teachingeva.dto.StudentDto;
 
 import java.util.List;
 
@@ -50,6 +51,21 @@ public interface EvaluateService extends IService<Evaluate> {
      */
     EvaluateDto getEvaluation(Integer id);
 
+    /**
+     * 分发各个测评
+     * @param eid
+     * @return
+     */
     Boolean handOutEvaluations(Integer eid);
+
+    /**
+     * 统计已完成问卷人数
+     */
+    List<StudentDto> studentsDoneEvaluation(Integer eid);
+
+    /**
+     * 统计未完成问卷人数
+     */
+    List<StudentDto> studentsUndoneEvaluation(Integer eid);
 
 }

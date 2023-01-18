@@ -9,5 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2023-01-17 01:54:58
 */
 public interface ScoreHistoryService extends IService<ScoreHistory> {
-
+    /**
+     * 统计总分
+     */
+    
 }
